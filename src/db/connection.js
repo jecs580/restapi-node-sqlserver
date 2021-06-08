@@ -1,16 +1,16 @@
 import sql from 'mssql'
-
+import {config} from 'dotenv'
 const dbSettings ={
     user:process.env.USER_DB,
     password:process.env.PASSWORD_DB,
     server:process.env.SERVER,
-    database:process.env.webstore,
+    database:process.env.DATABASE,
     options:{
         encrypt: true, 
         trustServerCertificate: true 
     },
 }
-async function getConnection() {
+export async function getConnection() {
     try {
         const pool = await sql.connect(dbSettings)
         return pool;
@@ -18,5 +18,3 @@ async function getConnection() {
         console.log(error);
     }
 }
-
-getConnection();
