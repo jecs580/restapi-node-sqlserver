@@ -1,10 +1,10 @@
-import {getConnection, sql} from '../db/connection'
+import {getConnection, sql, queries} from '../db'
 import {response,request} from 'express'
+import querys from '../db'
 export const getProducts= async (req= request,res=response)=>{
     try {
         const pool = await getConnection();
-        const result = await pool.request().query("SELECT * FROM Products");
-        console.log(result);
+        const result = await pool.request().query(queries.getAllProducts);
         res.status(200).json({
             ok:true,
             products:result.recordset
@@ -33,7 +33,7 @@ export const createNewProduct= async(req=request,res= response)=>{
         .input("name",sql.VarChar,name)
         .input("description",sql.Text,description)
         .input('quantity', sql.Int,quantity)
-        .query("INSERT INTO Products (name, description, quantity) VALUES(@name, @description, @quantity)")
+        .query(queries.createNewProduct)
         res.json({
             ok:true,
             product:{
