@@ -53,27 +53,46 @@ export const createNewProduct= async(req=request,res= response)=>{
 
 export const getProductById = async(req=request, res=response)=>{
     const {id} = req.params;
-   try {
-    const pool = await getConnection();
-    const result = await pool.request()
-    .input('id',id)
-    .query(queries.getProductById)
-    if(result.recordset.length==0){
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input('id',id)
+        .query(queries.getProductById)
+        if(result.recordset.length==0){
+            return res.status(400).json({
+                ok:false,
+                msg:'No existe un producto con ese id'
+            })
+        }
+        return res.json({
+            ok:true,
+            product:result.recordset[0]
+        })
+    } catch (error) {
+        console.log(error);
         return res.status(400).json({
             ok:false,
-            msg:'No existe un producto con ese id'
+            msg:'Error a la hora de obtener un producto'
         })
     }
-    return res.json({
-        ok:true,
-        product:result.recordset[0]
-    })
-   } catch (error) {
-       console.log(error);
-       return res.status(400).json({
-        ok:false,
-        msg:'Error a la hora de obtener un producto'
-    })
-   }
+}
+export const deleteProductById =async(req=request, res=response)=>{
+    const {id} = req.params;
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+        .input('id',id)
+        .query(queries.deleteProduct)
+        return res.json({
+            ok:true,
+            msg:'Producto eliminado exitosamente'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok:false,
+            msg:'Error a la hora de obtener un producto'
+        })
+    }
 }
 
