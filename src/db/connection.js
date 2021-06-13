@@ -1,5 +1,4 @@
 import sql from 'mssql'
-import {config} from 'dotenv'
 const dbSettings ={
     user:process.env.USER_DB,
     password:process.env.PASSWORD_DB,

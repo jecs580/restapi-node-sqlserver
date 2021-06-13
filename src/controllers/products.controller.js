@@ -114,3 +114,35 @@ export const countProducts =async(req=request, res=response)=>{
     }
 }
 
+export const updateProductById= async(req=request, res = response)=>{
+    const {name,description, quantity} = req.body;
+    const {id}=req.params
+    if(name==null || description==null|| quantity==null){
+        return res.status(400).json({
+            ok:false,
+            msg:'Todos los campos son requeridos' 
+        })
+    }
+    try {
+        const pool = await getConnection();
+        await pool.request()
+        .input('name', sql.VarChar, name)
+        .input('description', sql.Text, description)
+        .input('quantity', sql.Int, quantity)
+        .input('id', sql.Int, id)
+        .query(queries.updateProductById);
+        return res.json({
+            ok:true,
+            name,
+            description,
+            quantity
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok:false,
+            msg:'Error a la hora actualizar un productos'
+        })
+    }
+    
+}
