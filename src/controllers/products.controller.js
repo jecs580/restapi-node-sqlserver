@@ -1,6 +1,5 @@
 import {getConnection, sql, queries} from '../db'
 import {response,request} from 'express'
-import querys from '../db'
 export const getProducts= async (req= request,res=response)=>{
     try {
         const pool = await getConnection();
@@ -92,6 +91,25 @@ export const deleteProductById =async(req=request, res=response)=>{
         return res.status(400).json({
             ok:false,
             msg:'Error a la hora de obtener un producto'
+        })
+    }
+}
+
+export const countProducts =async(req=request, res=response)=>{
+    try {
+        const pool = await getConnection();
+        const result = await pool.request()
+        .query(queries.getTotalProducts)
+        console.log(result.recordset);
+        return res.json({
+            ok:true,
+            count:result.recordset[0]['']
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok:false,
+            msg:'Error a la hora de contar los productos'
         })
     }
 }
